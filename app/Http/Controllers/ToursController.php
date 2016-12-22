@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Tour;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ToursController extends Controller
@@ -32,26 +33,22 @@ class ToursController extends Controller
             'description' => 'required|min:4'
         ]);
 
-        $tour = Tour::create($request->all());
+        $tour = new Tour;
+        $result = $tour->toInsert($request);
 
-        return response()->json(['success' => true, 'tour' => $tour]);
+        return response()->json(['success' => true, 'tour' => $result]);
 	}
 
-	public function update(Request $request, $id)
+	public function update(Request $request, Tour $tour)
     {
         $this->validate($request, [
-            'data.place' => 'required|min:4',
-            'data.description' => 'required|min:4'
-        ], [
-            'data.place.required' => 'Tour is required',
-            'data.place.min' => 'Tour must have 4 characters',
-            'data.description.required' => 'Description is required',
-            'data.description.min' => 'Description must have 4 characters',
+            'place' => 'required|min:4',
+            'description' => 'required|min:4'
         ]);
 
-        DB::table('tours')->where('id', $id)->update($request->all()['data']);
+        $result = $tour->toUpdate($request, $tour);
 
-        return response()->json(['success' => true]);
+        return response()->json(['success' => true, 'result' => $request->all()]);
     }
 
     public function destroy($id)

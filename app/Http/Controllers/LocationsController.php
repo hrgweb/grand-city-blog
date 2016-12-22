@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Location;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class LocationsController extends Controller
@@ -27,33 +28,29 @@ class LocationsController extends Controller
 
     public function store(Request $request)
     {
-        return response()->json([$request->all()]);
+        // return response()->json([$request->all()]);
 
     	$this->validate($request, [
             'location' => 'required|min:4',
             'title' => 'required|min:4'
         ]);
 
-        $location = Location::create($request->all());
+        $location = new Location;
+        $result = $location->toInsert($request);
 
-        return response()->json(['success' => true, 'location' => $location]);
+        return response()->json(['success' => true, 'location' => $result]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Location $location)
     {
         $this->validate($request, [
-            'data.location' => 'required|min:4',
-            'data.title' => 'required|min:4'
-        ], [
-            'data.location.required' => 'Location is required',
-            'data.location.min' => 'Location must have 4 characters',
-            'data.title.required' => 'Title is required',
-            'data.title.min' => 'Title must have 4 characters',
+            'location' => 'required|min:4',
+            'title' => 'required|min:4'
         ]);
 
-        DB::table('locations')->where('id', $id)->update($request->all()['data']);
+        $location->toUpdate($request, $location);
 
-        return response()->json(['success' => true]);
+        return response()->json(['success' => true, 'result' => $request->all()]);
     }
 
     public function destroy($id)

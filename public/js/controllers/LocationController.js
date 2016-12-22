@@ -1,4 +1,4 @@
-app.controller('LocationController', ['$scope', '$http', '$log', 'crud', 'display', function($scope, $http, $log, crud, display){
+app.controller('LocationController', ['$scope', '$http', 'crud', 'helper', function($scope, $http, crud, helper){
 
 	$scope.records = {};
 	$scope.inputs = {};
@@ -10,6 +10,7 @@ app.controller('LocationController', ['$scope', '$http', '$log', 'crud', 'displa
 	$scope.isEdit = true;
 	$scope.isTableShow = false;
 	$scope.recordsCount = 0;
+	$scope.recordIndex = 0;
 
 	var getRecords = function() {
 		crud.getLocationRecords().then(function(result) {
@@ -42,8 +43,7 @@ app.controller('LocationController', ['$scope', '$http', '$log', 'crud', 'displa
 	};
 
 	$scope.addLocation = function(inputs) {
-		crud.addLocation(inputs);
-		/*crud.addLocation(inputs).then(function(result) {
+		crud.addLocation(inputs).then(function(result) {
 			$scope.isError = true;
 			errorSuccessStatus(true, true);
 
@@ -57,7 +57,7 @@ app.controller('LocationController', ['$scope', '$http', '$log', 'crud', 'displa
 		}, function(error) {
 			$scope.errors = error.data;
 			errorSuccessStatus(false, false);
-		});*/
+		});
 	};
 
 	$scope.editLocation = function(record) {
@@ -69,13 +69,19 @@ app.controller('LocationController', ['$scope', '$http', '$log', 'crud', 'displa
 		};
 		errorSuccessStatus(true, false);
 		buttonToggleVisibility(false, false);
+
+		// Get the record index in the $scope.records
+		helper.recordIndex($scope.records, record);
 	};
 
 	$scope.updateLocation = function(inputs) {
 		crud.updateLocation(inputs).then(function(result) {
-			if (result.data.success) {
+			var data = result.data;
+
+			if (data.success) {
 				$scope.isEdit = false;
-				getRecords();
+				$scope.records = helper.recordList($scope.records, data.result);
+				
 				errorSuccessStatus(true, true);
 				clearInputsAndMessage('updated');
 			}
@@ -99,32 +105,6 @@ app.controller('LocationController', ['$scope', '$http', '$log', 'crud', 'displa
 				$scope.records = newArray;	
 			}
 		});
-	};
-
-	$scope.uploadFile = function() {
-	    var file = $scope.myFile;
-
-	    console.log('file is ');
-	    console.dir(file);
-
-	    var uploadUrl = "/fileUpload";
-	    fileUpload.uploadFileToUrl(file, uploadUrl);
-	};
-
-	$scope.upload = function() {
-
-		var fd = new FormData();
-
-		fd.append('file', file);
-		fd.append('data', 'string');
-		$http.post(uploadUrl, fd, {
-		        transformRequest: angular.identity,
-		        headers: { 'Content-Type': undefined }
-		    })
-		    .success(function() {})
-		    .error(function() {}
-		);
-
 	};
 
 }]);

@@ -2,29 +2,44 @@
 
 namespace App;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Location extends Model
 {
-	protected $fillable = [ 'location', 'title', 'avatar', 'description' ];
+	protected $fillable = [ 'user_id', 'location', 'title', 'avatar', 'description' ];
 
-	public function setLocationAttribut($location)
+	/*=============== GET/SET ATTRIBUTE ===============*/ 
+
+	public function setLocationAttribute($location)
 	{
 		$this->attributes['location'] = ucfirst($location);
 	}
 
-	public function setTitleAttribut($title)
+	public function setTitleAttribute($title)
 	{
 		$this->attributes['title'] = ucfirst($title);
 	}
 
-	public function setLocationAttribute($location)
+	/*=============== CUSTOM METHODS ===============*/ 
+
+	public function toInsert($request)
 	{
-		$this->attributes['location'] = ucwords($location);
+		return auth()->user()->location()->create($request->all());
 	}
 
-	public function setTitleAttribute($title)
+	public function toUpdate($request, $location)
 	{
-		$this->attributes['title'] = ucwords($title);
+		array_add($request, 'user_id', auth()->user()->id);
+
+        return $location->update($request->all());
 	}
+
+	/*=============== RELATIONSHIP ===============*/ 
+
+	public function user()
+	{
+		return $this->belongsTo(User::class);
+	}
+
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Food;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class FoodsController extends Controller
@@ -34,26 +35,22 @@ class FoodsController extends Controller
             'description' => 'required|min:4'
         ]);
 
-        $food = Food::create($request->all());
+        $food = new Food;
+        $result = $food->toInsert($request);
 
-        return response()->json(['success' => true, 'food' => $food]);
+        return response()->json(['success' => true, 'food' => $result]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Food $food)
     {
         $this->validate($request, [
-            'data.name' => 'required|min:4',
-            'data.description' => 'required|min:4'
-        ], [
-            'data.name.required' => 'Food is required',
-            'data.name.min' => 'Food must have 4 characters',
-            'data.description.required' => 'Description is required',
-            'data.description.min' => 'Description must have 4 characters',
+            'name' => 'required|min:4',
+            'description' => 'required|min:4'
         ]);
 
-        DB::table('foods')->where('id', $id)->update($request->all()['data']);
+        $result = $food->toUpdate($request, $food);
 
-        return response()->json(['success' => true]);
+        return response()->json(['success' => true, 'result' => $request->all()]);
     }
 
     public function destroy($id)

@@ -71,10 +71,8 @@
     <script src="{{ asset('js/vendor/jquery.min.js') }}"></script>
     <script src="{{ asset('js/vendor/bootstrap.min.js') }}"></script>
     <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('js/directives/FileModel.js') }}"></script>
     <script src="{{ asset('js/services/CrudService.js') }}"></script>
-    <script src="{{ asset('js/services/AppearanceService.js') }}"></script>
-    <script src="{{ asset('js/services/FileUploadService.js') }}"></script>
+    <script src="{{ asset('js/services/HelperService.js') }}"></script>
     @yield('footer')
 </body>
 </html>

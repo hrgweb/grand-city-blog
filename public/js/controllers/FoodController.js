@@ -1,4 +1,4 @@
-app.controller('FoodController', ['$scope', '$http', 'crud', 'display', function($scope, $http, crud, display) {
+app.controller('FoodController', ['$scope', '$http', 'crud', 'helper', function($scope, $http, crud, helper) {
 
 	$scope.records = {};
 	$scope.recordsCount = 0;
@@ -58,7 +58,6 @@ app.controller('FoodController', ['$scope', '$http', 'crud', 'display', function
 	};
 
 	$scope.editFood = function(record) {
-		console.log(record);
 		$scope.inputs = {
 			id: record.id,
 			name: record.name,
@@ -66,13 +65,19 @@ app.controller('FoodController', ['$scope', '$http', 'crud', 'display', function
 		};
 		errorSuccessStatus(true, false);
 		buttonToggleVisibility(false, false);
+
+		// Get the record index in the $scope.records
+		helper.recordIndex($scope.records, record);
 	};
 
 	$scope.updateFood = function(inputs) {
 		crud.updateFood(inputs).then(function(result) {
-			if (result.data.success) {
+			var data = result.data;
+
+			if (data.success) {
 				$scope.isEdit = false;
-				getFoodRecords();
+				$scope.records = helper.recordList($scope.records, data.result);
+
 				errorSuccessStatus(true, true);
 				clearInputsAndMessage('updated');
 			}

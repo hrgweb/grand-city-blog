@@ -1,4 +1,4 @@
-app.controller('TourController', ['$scope', '$http', 'crud', function($scope, $http, crud) {
+app.controller('TourController', ['$scope', '$http', 'crud', 'helper', function($scope, $http, crud, helper) {
 
 	$scope.records = {};
 	$scope.inputs = {};
@@ -65,13 +65,19 @@ app.controller('TourController', ['$scope', '$http', 'crud', function($scope, $h
 		};
 		errorSuccessStatus(true, false);
 		buttonToggleVisibility(false, false);
+
+		// Get the record index in the $scope.records
+		helper.recordIndex($scope.records, record);
 	};
 
 	$scope.updateTour = function(inputs) {
 		crud.updateTour(inputs).then(function(result) {
-			if (result.data.success) {
+			var data = result.data;
+
+			if (data.success) {
 				$scope.isEdit = false;
-				getTourRecords();
+				$scope.records = helper.recordList($scope.records, data.result);
+
 				errorSuccessStatus(true, true);
 				clearInputsAndMessage('updated');
 			}

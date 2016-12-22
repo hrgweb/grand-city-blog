@@ -9,34 +9,17 @@ app.service('crud', ['$http', function($http){
 	};
 
 	this.addLocation = function(inputs) {
-		/*return $http({
+		return $http({
 			method: 'POST',
 			url: '/location',
 			data: inputs
-		});*/
-
-		var fd = new FormData($('form#formLocation'));
-
-		// fd.append('file', file);
-		// fd.append('data', 'string');
-		// fd.append('avatar', inputs);
-
-		// console.log(fd);
-		console.log(inputs);
-
-		/*$http.post('/location', fd, {
-		        transformRequest: angular.identity,
-		        headers: { 'Content-Type': undefined }
-		    })
-		    .success(function() {
-		    	
-		    })
-		    .error(function() {}
-		);*/
+		});
 	};
 
 	this.updateLocation = function(inputs) {
-		return $http.put('/location/' + inputs.id,{
+		return $http({
+			url: '/location/' + inputs.id,
+			method: 'PUT',
  			data: inputs
 		});
 	};
@@ -65,7 +48,9 @@ app.service('crud', ['$http', function($http){
 	};
 
 	this.updateFood = function(inputs) {
-		return $http.put('/food/' + inputs.id,{
+		return $http({
+			url: '/food/' + inputs.id,
+			method: 'PUT',
  			data: inputs
 		});
 	};
@@ -94,7 +79,9 @@ app.service('crud', ['$http', function($http){
 	};
 
 	this.updateTour = function(inputs) {
-		return $http.put('/tour/' + inputs.id,{
+		return $http({
+			url: '/tour/' + inputs.id,
+			method: 'PUT',
  			data: inputs
 		});
 	};

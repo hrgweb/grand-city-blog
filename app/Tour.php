@@ -12,4 +12,21 @@ class Tour extends Model
 	{
 		$this->attributes['place'] = ucwords($place);
 	}
+
+	public function toInsert($request)
+	{
+		return auth()->user()->tours()->create($request->all());
+	}
+
+	public function toUpdate($request, $tour)
+	{
+		array_add($request, 'user_id', auth()->user()->id);
+
+		return $tour->update($request->all());
+	}
+
+	public function user()
+	{
+		return $this->belongsTo(User::class);
+	}
 }
