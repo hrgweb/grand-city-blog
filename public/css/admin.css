@@ -1,0 +1,47 @@
+.wrapper { overflow: hidden; }
+
+/*=============== header ===============*/ 
+header {
+    background: #222D32;
+}
+header h2 > a,
+header h2 > a:focus,
+header h2 > a:hover { 
+	color: #fff; 
+	text-decoration: none;
+}
+header h2 > a { padding-left: 1em; }
+
+/*=============== nav ===============*/ 
+nav ul { 
+	margin: 0; 
+	margin-top: 1.7em;
+	padding-right: 1.5em;
+}
+nav ul > li { color: #fff; }
+
+/*=============== .main-sidebar ===============*/
+.main-sidebar { background: #222D32; height: 100vh; }
+.sidebar-menu { padding: 1em 2em; }
+.sidebar-menu > li { list-style-type: none; }
+.sidebar-menu > li > a {
+	display: block;
+    padding: 0.5em;
+	font-size: 1.3em;
+}
+.sidebar-menu > li > a,
+.sidebar-menu > li > a:hover,
+.sidebar-menu > li > a:focus {
+	color: #337AB7;
+}
+
+
+/*=============== Misc ===============*/ 
+ul.alert { padding-left: 3em; }
+
+
+
+/*=============== Angulars - ngCloak ===============*/ 
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
